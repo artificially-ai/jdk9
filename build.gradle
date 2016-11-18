@@ -33,12 +33,12 @@ jar {
     manifest {
         attributes(
                 'Class-Path': configurations.compile.collect { it.getName() }.join(' '),
-                'Main-Class': 'nl.ekholabs.samples.jdk9.JDK9Reactive'
+                'Main-Class': 'nl.ekholabs.samples.main.JDK9Reactive'
         )
     }
 }
 
-mainClassName = 'nl.ekholabs.samples.jdk9.JDK9Reactive'
+mainClassName = 'nl.ekholabs.samples.main.JDK9Reactive'
 
 run {
     if (project.hasProperty('args')) {
