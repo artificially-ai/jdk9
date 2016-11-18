@@ -8,8 +8,9 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import nl.ekholabs.samples.reactive.InstantReactiveSubscriber;
+import java.util.stream.IntStream;
 import nl.ekholabs.samples.reactive.InstantPublisher;
+import nl.ekholabs.samples.reactive.InstantReactiveSubscriber;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -23,10 +24,12 @@ public class JDK9Reactive {
   private static final Logger log = Logger.getLogger(JDK9Reactive.class.getPackageName());
 
   public static final String BUFFER = "buffer";
+  public static final String SUBS = "subs";
 
   final static Supplier<Options> createOptions = () -> {
     final Options options = new Options();
     options.addOption(BUFFER, true, "Buffer size for consumption.");
+    options.addOption(SUBS, true, "Number of subscribers.");
 
     return options;
   };
@@ -46,15 +49,24 @@ public class JDK9Reactive {
 
   public static void main(final String... args) throws IOException, ExecutionException, InterruptedException {
     Optional<CommandLine> commandLine = createCommandLine.apply(createOptions.get()).apply(List.of(args));
+
     commandLine.ifPresent(cmd -> {
-      final int buffer = parseInt(cmd.getOptionValue(BUFFER));
 
-      final InstantReactiveSubscriber subscriber = new InstantReactiveSubscriber(instant -> {
-        log.log(Level.INFO, String.format("Logging instant '%s' from Thread '%s'", instant, Thread.currentThread()));
-      }, buffer);
+      final int buffer = parseInt(cmd.getOptionValue(BUFFER, "5"));
+      final int subs = parseInt(cmd.getOptionValue(SUBS, "10"));
 
-      final InstantPublisher publisher = new InstantPublisher();
-      publisher.subscribe(subscriber);
+      final InstantPublisher publisher = InstantPublisher.getInstance();
+
+      IntStream.range(1, subs)
+        .boxed()
+        .forEach(integer -> {
+          final InstantReactiveSubscriber subscriber = new InstantReactiveSubscriber(instant -> {
+            log.log(Level.INFO, String.format("Logging instant '%s' from Thread '%s' and index 'INDEX-%s'",
+              instant, Thread.currentThread(), integer));
+          }, buffer);
+
+          publisher.subscribe(subscriber);
+      });
     });
   }
 }

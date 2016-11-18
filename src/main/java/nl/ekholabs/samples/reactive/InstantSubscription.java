@@ -5,11 +5,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Flow.Subscriber;
 import java.util.concurrent.Flow.Subscription;
 import java.util.concurrent.Future;
-import java.util.logging.Logger;
 
 public class InstantSubscription implements Subscription {
-
-  private static final Logger log = Logger.getLogger(InstantSubscription.class.getPackageName());
 
   private Future<?> future;
 

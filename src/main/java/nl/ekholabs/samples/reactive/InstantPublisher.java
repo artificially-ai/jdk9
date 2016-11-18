@@ -11,14 +11,26 @@ import java.util.concurrent.TimeUnit;
 
 public class InstantPublisher implements Publisher<Instant> {
 
+  private static InstantPublisher instance;
+
+  static {
+    instance = new InstantPublisher();
+  }
+
   private final ExecutorService executor = ForkJoinPool.commonPool();
+
+  private InstantPublisher() {
+  }
+
+  public static InstantPublisher getInstance() {
+    return instance;
+  }
 
   @Override
   public void subscribe(Subscriber<? super Instant> subscriber) {
 
     final ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
-    scheduledExecutorService.scheduleAtFixedRate(() -> {
-      subscriber.onSubscribe(new InstantSubscription(subscriber, executor));
-    }, 1l, 1l, TimeUnit.SECONDS);
+    scheduledExecutorService.scheduleAtFixedRate(() -> subscriber.onSubscribe(new InstantSubscription(subscriber, executor)),
+      0L, 1L, TimeUnit.SECONDS);
   }
 }

@@ -34,6 +34,8 @@ public class InstantReactiveSubscriber implements Subscriber<Instant> {
     if (count > 0) {
       consumer.accept(item);
       count--;
+    } else {
+      subscription.cancel();
     }
   }
 
