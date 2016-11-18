@@ -6,7 +6,7 @@ This repository contains some sample code I built against the JDK 9 EA realease 
 
 Download the JDK 9 EA here -> [JDK9](https://jdk9.java.net/download/)
 
-After cloning the repository execute the following command:
+After cloning the repository, please execute the following command:
 
 ```
 ./gradlew clean build shadowJar
@@ -15,7 +15,7 @@ After cloning the repository execute the following command:
 # Running the application
 
 Currently there are two main applications within the code, but only one is configured via Gradle. In order to run
-the second application you can change the ```build.gradle``` file or just run it from IntelliJ IDEA 2016.2.
+the second application, you can either change the ```build.gradle``` file or just run it from IntelliJ IDEA 2016.2.
 
 ## With Gradle
 
